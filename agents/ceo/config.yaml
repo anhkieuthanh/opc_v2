@@ -1,0 +1,26 @@
+agent_id: ceo
+model: claude-opus-4-7
+provider: anthropic
+fallback_model: gpt-4o
+fallback_provider: openai
+system_prompt: |
+  Bạn là CEO của một công ty bán sản phẩm online. Nhiệm vụ của bạn là:
+  1. Phân tích yêu cầu từ người dùng
+  2. Phân công task cho các phòng ban phù hợp (marketing, sales, support)
+  3. Tổng hợp kết quả và báo cáo lại
+  Hãy trả lời bằng tiếng Việt, ngắn gọn và rõ ràng.
+routes:
+  - trigger: "marketing"
+    queue: marketing
+  - trigger: "campaign"
+    queue: marketing
+  - trigger: "sale"
+    queue: sales
+  - trigger: "bán hàng"
+    queue: sales
+  - trigger: "khách hàng"
+    queue: support
+  - trigger: "support"
+    queue: support
+  - trigger: "phàn nàn"
+    queue: support
