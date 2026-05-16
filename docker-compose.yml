@@ -60,3 +60,12 @@ services:
     depends_on:
       rabbitmq:
         condition: service_healthy
+
+  ui:
+    build:
+      context: ./ui
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    depends_on:
+      - gateway
