@@ -1,6 +1,6 @@
 import json
 import pytest
-from unittest.mock import AsyncMock, MagicMock, patch
+from unittest.mock import AsyncMock, MagicMock
 from agents.base.queue import RabbitMQClient
 from shared.message import MessageType, OPCMessage, Payload
 
