@@ -1,0 +1,62 @@
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  gateway:
+    build:
+      context: .
+      dockerfile: docker/gateway.Dockerfile
+    ports:
+      - "8000:8000"
+    env_file: .env
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+
+  agent-ceo:
+    build:
+      context: .
+      dockerfile: docker/agent.Dockerfile
+    command: python -m agents.ceo.agent
+    env_file: .env
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+
+  agent-marketing:
+    build:
+      context: .
+      dockerfile: docker/agent.Dockerfile
+    command: python -m agents.marketing.agent
+    env_file: .env
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+
+  agent-sales:
+    build:
+      context: .
+      dockerfile: docker/agent.Dockerfile
+    command: python -m agents.sales.agent
+    env_file: .env
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+
+  agent-support:
+    build:
+      context: .
+      dockerfile: docker/agent.Dockerfile
+    command: python -m agents.support.agent
+    env_file: .env
+    depends_on:
+      rabbitmq:
+        condition: service_healthy

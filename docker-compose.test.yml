@@ -1,0 +1,10 @@
+services:
+  rabbitmq-test:
+    image: rabbitmq:3
+    ports:
+      - "5673:5672"
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
