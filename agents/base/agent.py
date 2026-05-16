@@ -1,6 +1,5 @@
 import asyncio
 import os
-from pathlib import Path
 
 import yaml
 from dotenv import load_dotenv
@@ -40,10 +39,14 @@ class BaseAgent:
             )
         except Exception as exc:
             if self._fallback_model and self._fallback_provider:
-                fallback = build_provider(self._fallback_provider)
-                response_text = await fallback.complete(
-                    self._system_prompt, message.payload.content, self._fallback_model
-                )
+                try:
+                    fallback = build_provider(self._fallback_provider)
+                    response_text = await fallback.complete(
+                        self._system_prompt, message.payload.content, self._fallback_model
+                    )
+                except Exception as fallback_exc:
+                    await self._report_error(message, str(fallback_exc))
+                    return
             else:
                 await self._report_error(message, str(exc))
                 return
